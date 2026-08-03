@@ -45,10 +45,6 @@ namespace ClientApp
 
             ClientSubmitButton.Enabled = false;
 
-            // clear all text boxes
-            ClientQuestionTextBox.Text = "";
-            ClientAnswerTextBox.Text = "";
-
             // start client
             StartClient();
         }
@@ -129,7 +125,7 @@ namespace ClientApp
         private void ClientSubmitButton_Click(object sender, EventArgs e)
         {
 
-
+            ClientSubmitButton.Enabled = false;
             string errorMessage = string.Empty;
             
             if(string.IsNullOrWhiteSpace(this.ClientAnswerTextBox.Text))
@@ -155,8 +151,12 @@ namespace ClientApp
             }
             else
             {
-                MessageBox.Show("Incorrect! Please check your answer", "Incorrect Answer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Incorrect Answer", "Incorrect Answer", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
+            // clear all text boxes
+            ClientQuestionTextBox.Text = "";
+            ClientAnswerTextBox.Text = "";
 
             // construct byte array to stream in write mode
             String strToSend = answerStatus;
@@ -172,7 +172,6 @@ namespace ClientApp
             {
                 return "y";
             }
-
             return "n";
         }
 
