@@ -335,6 +335,16 @@ namespace MathQuestionChallenge
                 else
                 {
                     resultOutcome = "Student answered the question incorrectly";
+
+                    // add the question to the linked list
+                    mathQuesLinkedList.AddFirst(currentQuestion);
+                    LinkedListTextBox.Text = "HEAD <->"; mathQuesLinkedList.First.Value.ToQuestionStr();
+                    foreach (var item in mathQuesLinkedList)
+                    {
+                        LinkedListTextBox.Text += $" {item.ToQuestionStr()} <->";
+                    }
+                    LinkedListTextBox.Text += " TAIL";
+
                 }
 
                 this.BinaryTreeTextBox.Text = resultOutcome;
