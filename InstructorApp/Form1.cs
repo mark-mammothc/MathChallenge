@@ -92,6 +92,16 @@ namespace MathQuestionChallenge
 
                 // populate data structures
                 mathQuesList.Add(currentQuestion);
+                mathQuestionBinTree.Add(currentQuestion);
+                mathQuesHashTable.Add(currentQuestion.ToQuestionStr(), currentQuestion);
+
+
+
+                // 2. Rebuild the complete "ORDER ASKED" string from mathQuesList
+                string allQuestionsAsked = string.Join(", ", mathQuesList);
+
+                // 3. Update the text box display with full history
+                BinaryTreeTextBox.Text = "ORDER ASKED: " + allQuestionsAsked + ".";
 
                 // add the question into the QuestionArrayDataGridView
                 DisplayTable();
@@ -109,7 +119,6 @@ namespace MathQuestionChallenge
                     SendButton.Enabled = false;
                 }
             }
-
         }
 
         private void PopulateDropdown()
@@ -240,7 +249,6 @@ namespace MathQuestionChallenge
             AnswerTextBox.Clear();
         }
 
-
         // QuestionArrayDataGridView
         private void DisplayTable()
         {
@@ -258,10 +266,34 @@ namespace MathQuestionChallenge
                 {
                     QuestionArrayDataGridView.Rows.Add(mathQuesList[i].GetStrArray());
                 }
-
                 QuestionArrayDataGridView.Refresh();
             }
+        }
 
+        private void UpdateBinaryTreeDisplay(string traversalType)
+        {
+            // 1. Clear the tree's traversal string buffer
+            mathQuestionBinTree.TraversalString = "";
+
+            // 2. Perform the requested traversal starting from the root node
+            switch (traversalType.ToUpper())
+            {
+                case "PRE":
+                    mathQuestionBinTree.Preorder(mathQuestionBinTree.GetRoot());
+                    break;
+                case "IN":
+                    mathQuestionBinTree.Inorder(mathQuestionBinTree.GetRoot());
+                    break;
+                case "POST":
+                    mathQuestionBinTree.Postorder(mathQuestionBinTree.GetRoot());
+                    break;
+            }
+
+            // 3. Trim trailing commas/spaces (e.g. "7(3+4), 8(10-2), " -> "7(3+4), 8(10-2)")
+            string formattedResult = mathQuestionBinTree.TraversalString.TrimEnd(',');
+
+            // 4. Update the text box on the Instructor screen
+            BinaryTreeTextBox.Text = $"{traversalType.ToUpper()}-ORDER: {formattedResult}.";
         }
 
 
@@ -338,22 +370,34 @@ namespace MathQuestionChallenge
 
                     // add the question to the linked list
                     mathQuesLinkedList.AddFirst(currentQuestion);
-                    LinkedListTextBox.Text = "HEAD <->"; mathQuesLinkedList.First.Value.ToQuestionStr();
+                    LinkedListTextBox.Text = "HEAD <->";
                     foreach (var item in mathQuesLinkedList)
                     {
                         LinkedListTextBox.Text += $" {item.ToQuestionStr()} <->";
                     }
                     LinkedListTextBox.Text += " TAIL";
-
                 }
 
-                this.BinaryTreeTextBox.Text = resultOutcome;
+         //       this.BinaryTreeTextBox.Text = resultOutcome;
                 clearTextBoxes();
                 SendButton.Enabled = true;
 
             }
         }
 
+        private void PreOrderDisplayButton_Click(object sender, EventArgs e)
+        {
+            UpdateBinaryTreeDisplay("PRE");
+        }
 
+        private void InOrderDisplayButton_Click(object sender, EventArgs e)
+        {
+            UpdateBinaryTreeDisplay("IN");
+        }
+
+        private void PostOrderDisplayButton_Click(object sender, EventArgs e)
+        {
+            UpdateBinaryTreeDisplay("POST");
+        }
     }
 }

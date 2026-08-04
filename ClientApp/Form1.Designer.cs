@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClientAppForm));
             this.ClientSubmitButton = new System.Windows.Forms.Button();
             this.StudentLabel = new System.Windows.Forms.Label();
             this.ClientAnswerGroupBox = new System.Windows.Forms.GroupBox();
@@ -149,6 +150,7 @@
             this.Controls.Add(this.ClientExitButton);
             this.Controls.Add(this.StudentLabel);
             this.Controls.Add(this.ClientAnswerGroupBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ClientAppForm";
             this.Text = "Student";
             this.ClientAnswerGroupBox.ResumeLayout(false);

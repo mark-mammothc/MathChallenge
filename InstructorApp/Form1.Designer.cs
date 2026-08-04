@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstructorAppForm));
             this.QuestionGroupBox = new System.Windows.Forms.GroupBox();
             this.AnswerLabel = new System.Windows.Forms.Label();
             this.SecondNumberLabel = new System.Windows.Forms.Label();
@@ -390,6 +391,7 @@
             this.PostOrderDisplayButton.TabIndex = 26;
             this.PostOrderDisplayButton.Text = "Display";
             this.PostOrderDisplayButton.UseVisualStyleBackColor = true;
+            this.PostOrderDisplayButton.Click += new System.EventHandler(this.PostOrderDisplayButton_Click);
             // 
             // panel2
             // 
@@ -432,6 +434,7 @@
             this.InOrderDisplayButton.TabIndex = 23;
             this.InOrderDisplayButton.Text = "Display";
             this.InOrderDisplayButton.UseVisualStyleBackColor = true;
+            this.InOrderDisplayButton.Click += new System.EventHandler(this.InOrderDisplayButton_Click);
             // 
             // panel1
             // 
@@ -460,6 +463,7 @@
             this.PreOrderDisplayButton.TabIndex = 20;
             this.PreOrderDisplayButton.Text = "Display";
             this.PreOrderDisplayButton.UseVisualStyleBackColor = true;
+            this.PreOrderDisplayButton.Click += new System.EventHandler(this.PreOrderDisplayButton_Click);
             // 
             // SystemMsgLabel
             // 
@@ -487,6 +491,7 @@
             this.Controls.Add(this.SendButton);
             this.Controls.Add(this.InstructorLabel);
             this.Controls.Add(this.QuestionGroupBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InstructorAppForm";
             this.Text = "Instructor";
             this.QuestionGroupBox.ResumeLayout(false);
