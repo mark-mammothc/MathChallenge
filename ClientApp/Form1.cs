@@ -178,22 +178,50 @@ namespace ClientApp
 
         private void ClientExitButton_Click(object sender, EventArgs e)
         {
-            // terminate client thread if still running
-            if (clientThread.IsAlive)
+            exitStatus = true;
+
+            try
             {
-                Console.WriteLine("Client thread is alive");
-                clientThread.Interrupt();
-                if (clientThread.IsAlive)
+                // Closing the stream causes any blocking netStream.Read() 
+                // in clientThread to unblock and throw/return 0 immediately
+                netStream?.Close();
+                clientSocket?.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error closing client socket: {ex.Message}");
+            }
+
+            // Wait briefly for the receive thread to finish its loop
+            if (clientThread != null && clientThread.IsAlive)
+            {
+                clientThread.Join(500);
+            }
+
+            // Safely close the Windows Form
+            this.Close();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            exitStatus = true;
+
+            try
+            {
+                netStream?.Close();
+                clientSocket?.Close();
+
+                if (clientThread != null && clientThread.IsAlive)
                 {
-                    Console.WriteLine("Client thread is now terminated");
+                    clientThread.Join(200); // Wait briefly for the loop to terminate
                 }
             }
-            else
+            catch
             {
-                Console.WriteLine("Client thread is terminated");
+                // Ignore cleanup exceptions on application shutdown
             }
-            // close the application for good
-            Environment.Exit(0);
         }
     }
 }

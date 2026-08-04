@@ -95,6 +95,9 @@ namespace MathQuestionChallenge
                 mathQuestionBinTree.Add(currentQuestion);
                 mathQuesHashTable.Add(currentQuestion.ToQuestionStr(), currentQuestion);
 
+                Console.WriteLine($"Added question to data structures: {currentQuestion.ToQuestionStr()}");
+                Console.WriteLine(mathQuesHashTable.Values.ToString());
+
                 // Rebuild the complete "ORDER ASKED" string from mathQuesList
                 string allQuestionsAsked = string.Join(", ", mathQuesList);
 
@@ -420,6 +423,57 @@ namespace MathQuestionChallenge
             else
             {
                 LinkedListTextBox.Text = "There have been no incorrect answers provided.";
+            }
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            exitStatus = true;
+
+            try
+            {
+                // Close stream and client socket
+                netStream?.Close();
+                serverSocket?.Close();
+
+                // Stop accepting new connections
+                serverListener?.Stop();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error closing server socket: {ex.Message}");
+            }
+
+            // Wait briefly for the server receive thread to finish
+            if (serverThread != null && serverThread.IsAlive)
+            {
+                serverThread.Join(500);
+            }
+
+            // Safely close the Windows Form
+            this.Close();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            exitStatus = true;
+
+            try
+            {
+                netStream?.Close();
+                serverSocket?.Close();
+                serverListener?.Stop();
+
+                if (serverThread != null && serverThread.IsAlive)
+                {
+                    serverThread.Join(200); // Wait briefly for the loop to terminate
+                }
+            }
+            catch
+            {
+                // Ignore cleanup exceptions on application shutdown
             }
         }
     }
