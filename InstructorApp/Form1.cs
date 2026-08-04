@@ -50,6 +50,8 @@ namespace MathQuestionChallenge
         // current math question sent / answered
         MathQuestion currentQuestion;
 
+        string questionResult = "n"; // default to incorrect answer
+
         public InstructorAppForm()
         {
             InitializeComponent();
@@ -340,6 +342,7 @@ namespace MathQuestionChallenge
                     bytesReceived.Length);
                     this.SetText(Encoding.ASCII.GetString(bytesReceived,
                     0, bytesRead));
+                    
                 }
                 catch (System.IO.IOException)
                 {
@@ -358,32 +361,26 @@ namespace MathQuestionChallenge
             }
             else
             {
-                string resultOutcome = string.Empty;
-  
+                string resultStatus = string.Empty;
+
                 if (text.Trim().Equals("y"))
                 {
-                    resultOutcome = "Student answered the question correctly";
+                    questionResult = "y";
+                    resultStatus = "Student answered the question correctly";
                 }
                 else
                 {
-                    resultOutcome = "Student answered the question incorrectly";
-
-                    // add the question to the linked list
+                    resultStatus = "Student answered the question incorrectly";
                     mathQuesLinkedList.AddFirst(currentQuestion);
-                    LinkedListTextBox.Text = "HEAD <->";
-                    foreach (var item in mathQuesLinkedList)
-                    {
-                        LinkedListTextBox.Text += $" {item.ToQuestionStr()} <->";
-                    }
-                    LinkedListTextBox.Text += " TAIL";
                 }
 
-         //       this.BinaryTreeTextBox.Text = resultOutcome;
+                // Place clearTextBoxes() here where UI access is safe
                 clearTextBoxes();
-                SendButton.Enabled = true;
 
+                SendButton.Enabled = true;
             }
         }
+
 
         private void PreOrderDisplayButton_Click(object sender, EventArgs e)
         {
@@ -398,6 +395,22 @@ namespace MathQuestionChallenge
         private void PostOrderDisplayButton_Click(object sender, EventArgs e)
         {
             UpdateBinaryTreeDisplay("POST");
+        }
+
+        private void DisplayLinkedListButton_Click(object sender, EventArgs e)
+        {
+            
+            if (mathQuesLinkedList.Count > 0)
+            {
+                // add the question to the linked list
+                //  mathQuesLinkedList.AddFirst(currentQuestion);
+                LinkedListTextBox.Text = "HEAD <->";
+                foreach (var item in mathQuesLinkedList)
+                {
+                    LinkedListTextBox.Text += $" {item.ToQuestionStr()} <->";
+                }
+                LinkedListTextBox.Text += " TAIL";
+            }
         }
     }
 }

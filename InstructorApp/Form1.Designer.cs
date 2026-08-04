@@ -265,6 +265,7 @@
             this.DisplayLinkedListButton.TabIndex = 12;
             this.DisplayLinkedListButton.Text = "Display Linked List";
             this.DisplayLinkedListButton.UseVisualStyleBackColor = true;
+            this.DisplayLinkedListButton.Click += new System.EventHandler(this.DisplayLinkedListButton_Click);
             // 
             // LinkedListTextBox
             // 
