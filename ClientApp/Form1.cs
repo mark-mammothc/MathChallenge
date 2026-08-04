@@ -125,7 +125,6 @@ namespace ClientApp
         private void ClientSubmitButton_Click(object sender, EventArgs e)
         {
 
-            ClientSubmitButton.Enabled = false;
             string errorMessage = string.Empty;
             
             if(string.IsNullOrWhiteSpace(this.ClientAnswerTextBox.Text))
@@ -153,6 +152,8 @@ namespace ClientApp
             {
                 MessageBox.Show("Incorrect Answer", "Incorrect Answer", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
+            ClientSubmitButton.Enabled = false;
 
             // clear all text boxes
             ClientQuestionTextBox.Text = "";

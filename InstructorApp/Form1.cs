@@ -50,7 +50,7 @@ namespace MathQuestionChallenge
         // current math question sent / answered
         MathQuestion currentQuestion;
 
-        string questionResult = "n"; // default to incorrect answer
+    //    string questionResult = "n"; // default to incorrect answer
 
         public InstructorAppForm()
         {
@@ -79,7 +79,6 @@ namespace MathQuestionChallenge
 
             // current Question
             currentQuestion = null;
-
         }
 
         private void SendButton_Click(object sender, EventArgs e)
@@ -87,7 +86,6 @@ namespace MathQuestionChallenge
             if(ValidateInputs())
             {
                 AnswerTextBox.Text = calculateAnswer(FirstNumberTextBox.Text, SecondNumberTextBox.Text, OperatorComboBox.SelectedItem.ToString());
-            
 
                 // int leftOperand, string mathOperator, int rightOperand, int answer
                 currentQuestion = new MathQuestion(int.Parse(FirstNumberTextBox.Text), OperatorComboBox.SelectedItem.ToString(), int.Parse(SecondNumberTextBox.Text), int.Parse(AnswerTextBox.Text));
@@ -97,17 +95,14 @@ namespace MathQuestionChallenge
                 mathQuestionBinTree.Add(currentQuestion);
                 mathQuesHashTable.Add(currentQuestion.ToQuestionStr(), currentQuestion);
 
-
-
-                // 2. Rebuild the complete "ORDER ASKED" string from mathQuesList
+                // Rebuild the complete "ORDER ASKED" string from mathQuesList
                 string allQuestionsAsked = string.Join(", ", mathQuesList);
 
-                // 3. Update the text box display with full history
+                // Update the text box display with full history
                 BinaryTreeTextBox.Text = "ORDER ASKED: " + allQuestionsAsked + ".";
 
                 // add the question into the QuestionArrayDataGridView
                 DisplayTable();
-
 
                 if (!string.IsNullOrWhiteSpace(AnswerTextBox.Text))
                 {
@@ -115,8 +110,8 @@ namespace MathQuestionChallenge
                     String strToSend = currentQuestion.ToQuestionStr();
                     byte[] bytesToSend = Encoding.ASCII.GetBytes(strToSend);
                     netStream.Write(bytesToSend, 0, bytesToSend.Length);
-                 //   SystemMsgLabel.Text += "Server: " + strToSend + Environment.NewLine;
-                //    Send_TextBox.Text = "";
+                    // SystemMsgLabel.Text += "Server: " + strToSend + Environment.NewLine;
+                    //  Send_TextBox.Text = "";
 
                     SendButton.Enabled = false;
                 }
@@ -148,8 +143,6 @@ namespace MathQuestionChallenge
             QuestionArrayDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-
-
         private bool ValidateInputs()
         {
             // 1: Check if any fields are empty first
@@ -158,10 +151,10 @@ namespace MathQuestionChallenge
             // 2: Check if inputs are numbers (only runs if all fields have text)
             if (!ValidateAreNumbers()) return false;
 
-            return true; // All good!
+            return true;
         }
 
-        // 1: Collects all empty errors
+        // Collects all empty errors
         private bool ValidateNotEmpty()
         {
             string errorMessage = "";
@@ -186,7 +179,7 @@ namespace MathQuestionChallenge
             return true;
         }
 
-        // 2: Collects all numeric format errors
+        // Collects all numeric format errors
         private bool ValidateAreNumbers()
         {
             string errorMessage = "";
@@ -208,7 +201,6 @@ namespace MathQuestionChallenge
                 ShowError("Please correct invalid entries:\n\n" + errorMessage);
                 return false;
             }
-
             return true;
         }
 
@@ -218,10 +210,9 @@ namespace MathQuestionChallenge
             MessageBox.Show(fullMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-
         private string calculateAnswer(string firstNumber, string secondNumber, string operation)
         {
-
+            // Convert the string inputs to integers
             int firstNum = int.Parse(firstNumber);
             int secondNum = int.Parse(secondNumber);
 
@@ -264,38 +255,48 @@ namespace MathQuestionChallenge
                 QuestionArrayDataGridView.Rows.Clear();
 
                 // questionArrayList has content of questions
+                // add each question to the DataGridView
                 for (int i = 0; i < mathQuesList.Count; i++)
                 {
                     QuestionArrayDataGridView.Rows.Add(mathQuesList[i].GetStrArray());
                 }
+
                 QuestionArrayDataGridView.Refresh();
             }
         }
 
         private void UpdateBinaryTreeDisplay(string traversalType)
         {
-            // 1. Clear the tree's traversal string buffer
-            mathQuestionBinTree.TraversalString = "";
-
-            // 2. Perform the requested traversal starting from the root node
-            switch (traversalType.ToUpper())
+            if (mathQuestionBinTree.Count == 0)
             {
-                case "PRE":
-                    mathQuestionBinTree.Preorder(mathQuestionBinTree.GetRoot());
-                    break;
-                case "IN":
-                    mathQuestionBinTree.Inorder(mathQuestionBinTree.GetRoot());
-                    break;
-                case "POST":
-                    mathQuestionBinTree.Postorder(mathQuestionBinTree.GetRoot());
-                    break;
+                BinaryTreeTextBox.Text = "The binary tree is empty. No questions have been asked yet.";
+                return;
             }
+            else
+            {
+                // Clear the tree's traversal string
+                mathQuestionBinTree.TraversalString = "";
 
-            // 3. Trim trailing commas/spaces (e.g. "7(3+4), 8(10-2), " -> "7(3+4), 8(10-2)")
-            string formattedResult = mathQuestionBinTree.TraversalString.TrimEnd(',');
+                // Perform the requested traversal starting from the root node
+                switch (traversalType.ToUpper())
+                {
+                    case "PRE":
+                        mathQuestionBinTree.Preorder(mathQuestionBinTree.GetRoot());
+                        break;
+                    case "IN":
+                        mathQuestionBinTree.Inorder(mathQuestionBinTree.GetRoot());
+                        break;
+                    case "POST":
+                        mathQuestionBinTree.Postorder(mathQuestionBinTree.GetRoot());
+                        break;
+                }
 
-            // 4. Update the text box on the Instructor screen
-            BinaryTreeTextBox.Text = $"{traversalType.ToUpper()}-ORDER: {formattedResult}.";
+                // Trim trailing commas/spaces
+                string formattedResult = mathQuestionBinTree.TraversalString.TrimEnd(',');
+
+                // Update the text box
+                BinaryTreeTextBox.Text = $"{traversalType.ToUpper()}-ORDER: {formattedResult}.";
+            }
         }
 
 
@@ -365,7 +366,7 @@ namespace MathQuestionChallenge
 
                 if (text.Trim().Equals("y"))
                 {
-                    questionResult = "y";
+               //     questionResult = "y";
                     resultStatus = "Student answered the question correctly";
                 }
                 else
@@ -374,9 +375,7 @@ namespace MathQuestionChallenge
                     mathQuesLinkedList.AddFirst(currentQuestion);
                 }
 
-                // Place clearTextBoxes() here where UI access is safe
                 clearTextBoxes();
-
                 SendButton.Enabled = true;
             }
         }
@@ -399,6 +398,13 @@ namespace MathQuestionChallenge
 
         private void DisplayLinkedListButton_Click(object sender, EventArgs e)
         {
+
+
+            if (mathQuesList.Count == 0)
+            {
+                LinkedListTextBox.Text = "No math questions answered";
+                return;
+            }
             
             if (mathQuesLinkedList.Count > 0)
             {
@@ -410,6 +416,10 @@ namespace MathQuestionChallenge
                     LinkedListTextBox.Text += $" {item.ToQuestionStr()} <->";
                 }
                 LinkedListTextBox.Text += " TAIL";
+            }
+            else
+            {
+                LinkedListTextBox.Text = "There have been no incorrect answers provided.";
             }
         }
     }
