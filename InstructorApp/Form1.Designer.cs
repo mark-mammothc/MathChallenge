@@ -217,6 +217,7 @@
             this.BubbleSortAscButton.TabIndex = 8;
             this.BubbleSortAscButton.Text = "Bubble Sort (asc)";
             this.BubbleSortAscButton.UseVisualStyleBackColor = true;
+            this.BubbleSortAscButton.Click += new System.EventHandler(this.BubbleSortAscButton_Click);
             // 
             // BubbleSortDescButton
             // 
@@ -226,6 +227,7 @@
             this.BubbleSortDescButton.TabIndex = 9;
             this.BubbleSortDescButton.Text = "Bubble Sort (desc)";
             this.BubbleSortDescButton.UseVisualStyleBackColor = true;
+            this.BubbleSortDescButton.Click += new System.EventHandler(this.BubbleSortDescButton_Click);
             // 
             // InsertionSortButton
             // 
@@ -235,6 +237,7 @@
             this.InsertionSortButton.TabIndex = 10;
             this.InsertionSortButton.Text = "Insertion Sort (asc)";
             this.InsertionSortButton.UseVisualStyleBackColor = true;
+            this.InsertionSortButton.Click += new System.EventHandler(this.InsertionSortButton_Click);
             // 
             // LinkedListGroupBox
             // 

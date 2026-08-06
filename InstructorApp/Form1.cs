@@ -79,6 +79,8 @@ namespace MathQuestionChallenge
 
             // current Question
             currentQuestion = null;
+
+            QuestionArrayDataGridView.AutoGenerateColumns = false;
         }
 
         private void SendButton_Click(object sender, EventArgs e)
@@ -131,17 +133,21 @@ namespace MathQuestionChallenge
         private void CreateDataGridViewCol()
         {
             QuestionArrayDataGridView.ReadOnly = true;
-            
+
+            // STOP WinForms from auto-generating new columns alongside your custom ones
+            QuestionArrayDataGridView.AutoGenerateColumns = false;
+
             var myColumns = new DataGridViewColumn[]
             {
-                new DataGridViewTextBoxColumn { Name = "QuestionLeftOperand", DataPropertyName = "", HeaderText = "Number 1" },
-                new DataGridViewTextBoxColumn { Name = "QuestionOperator", DataPropertyName = "", HeaderText = "Math" },
-                new DataGridViewTextBoxColumn { Name = "QuestionRightOperand", DataPropertyName = "", HeaderText = "Number 2" },
-                new DataGridViewTextBoxColumn { Name = "QuestionEqualSymbol", DataPropertyName = "", HeaderText = "=" },
-                new DataGridViewTextBoxColumn { Name = "QuestionAnswer", DataPropertyName = "", HeaderText = "Answer" },
+        // DataPropertyName MUST match the property names in your MathQuestion class!
+        new DataGridViewTextBoxColumn { Name = "QuestionLeftOperand", DataPropertyName = "LeftOperand", HeaderText = "Number 1" },
+        new DataGridViewTextBoxColumn { Name = "QuestionOperator", DataPropertyName = "Operator", HeaderText = "Math" },
+        new DataGridViewTextBoxColumn { Name = "QuestionRightOperand", DataPropertyName = "RightOperand", HeaderText = "Number 2" },
+        new DataGridViewTextBoxColumn { Name = "QuestionEqualSymbol", DataPropertyName = "EqualSymbol", HeaderText = "=" },
+        new DataGridViewTextBoxColumn { Name = "QuestionAnswer", DataPropertyName = "Answer", HeaderText = "Answer" },
             };
 
-            // add all created column elements
+            // Add all created column elements
             QuestionArrayDataGridView.Columns.AddRange(myColumns);
             QuestionArrayDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
@@ -248,24 +254,24 @@ namespace MathQuestionChallenge
         // QuestionArrayDataGridView
         private void DisplayTable()
         {
-            if (mathQuesList.Count == 0)
+            // Ensure data-binding is detached so Rows.Clear() won't throw an exception
+            QuestionArrayDataGridView.DataSource = null;
+
+            // Clear existing rows
+            QuestionArrayDataGridView.Rows.Clear();
+
+            if (mathQuesList == null || mathQuesList.Count == 0)
             {
                 return;
             }
-            else
+
+            // Add each question row using your GetStrArray() method
+            for (int i = 0; i < mathQuesList.Count; i++)
             {
-                // first remove rows that are already displayed
-                QuestionArrayDataGridView.Rows.Clear();
-
-                // questionArrayList has content of questions
-                // add each question to the DataGridView
-                for (int i = 0; i < mathQuesList.Count; i++)
-                {
-                    QuestionArrayDataGridView.Rows.Add(mathQuesList[i].GetStrArray());
-                }
-
-                QuestionArrayDataGridView.Refresh();
+                QuestionArrayDataGridView.Rows.Add(mathQuesList[i].GetStrArray());
             }
+
+            QuestionArrayDataGridView.Refresh();
         }
 
         private void UpdateBinaryTreeDisplay(string traversalType)
@@ -454,6 +460,11 @@ namespace MathQuestionChallenge
             this.Close();
         }
 
+
+        // Override the OnFormClosing method to ensure proper cleanup when the form is closed
+        // This is important to prevent resource leaks and ensure
+        // that the server thread is terminated gracefully.
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
@@ -475,6 +486,27 @@ namespace MathQuestionChallenge
             {
                 // Ignore cleanup exceptions on application shutdown
             }
+        }
+
+        private void BubbleSortAscButton_Click(object sender, EventArgs e)
+        {
+            // 1. Sort the list (modifies mathQuesList)
+            mathQuesList = Sorting.BubbleSortAscending(mathQuesList).ToList();
+
+            // 2. Refresh the display manually (NO DataSource assignment!)
+            DisplayTable();
+        }
+
+        private void BubbleSortDescButton_Click(object sender, EventArgs e)
+        {
+            mathQuesList = Sorting.BubbleSortDescending(mathQuesList).ToList();
+            DisplayTable();
+        }
+
+        private void InsertionSortButton_Click(object sender, EventArgs e)
+        {
+            mathQuesList = Sorting.InsertionSortAscending(mathQuesList).ToList();
+            DisplayTable();
         }
     }
 }
