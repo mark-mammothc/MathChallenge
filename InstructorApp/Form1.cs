@@ -23,6 +23,10 @@ namespace MathQuestionChallenge
         public const int BYTE_SIZE = 1024;
         public const int PORT_NUMBER = 8888;
 
+        // private int to keep track of whether there are any incorrect answers or not
+        private int incorrectAnswerCount = 0;
+        private bool isVisible = false;
+
         // listens for and accept incoming connection requests
         private TcpListener serverListener;
 
@@ -382,6 +386,8 @@ namespace MathQuestionChallenge
                 {
                     resultStatus = "Student answered the question incorrectly";
                     mathQuesLinkedList.AddFirst(currentQuestion);
+                    incorrectAnswerCount = 1;
+                    DisplayLinkedList();
                 }
 
                 clearTextBoxes();
@@ -408,6 +414,7 @@ namespace MathQuestionChallenge
         private void DisplayLinkedListButton_Click(object sender, EventArgs e)
         {
 
+            isVisible = true;
 
             if (mathQuesList.Count == 0)
             {
@@ -415,7 +422,7 @@ namespace MathQuestionChallenge
                 return;
             }
             
-            if (mathQuesLinkedList.Count > 0)
+            if (incorrectAnswerCount == 1)
             {
                 // add the question to the linked list
                 //  mathQuesLinkedList.AddFirst(currentQuestion);
@@ -431,6 +438,23 @@ namespace MathQuestionChallenge
                 LinkedListTextBox.Text = "There have been no incorrect answers provided.";
             }
         }
+
+        private void DisplayLinkedList()
+        {
+            if (isVisible)
+            {
+                // add the question to the linked list
+                //  mathQuesLinkedList.AddFirst(currentQuestion);
+                LinkedListTextBox.Text = "HEAD <->";
+                foreach (var item in mathQuesLinkedList)
+                {
+                    LinkedListTextBox.Text += $" {item.ToQuestionStr()} <->";
+                }
+                LinkedListTextBox.Text += " TAIL";
+            }
+        }
+
+
 
         private void ExitButton_Click(object sender, EventArgs e)
         {
