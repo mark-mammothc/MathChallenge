@@ -1,9 +1,11 @@
-﻿using System;
+﻿using BinTree;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -11,7 +13,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BinTree;
 
 namespace MathQuestionChallenge
 {
@@ -386,35 +387,51 @@ namespace MathQuestionChallenge
             }
         }
 
+        /// <summary>
+        /// Method:     ReceiveStream.
+        /// Desc:       Receives the stream of data from the client and updates state.
+        /// </summary>
         public void ReceiveStream()
         {
             byte[] bytesReceived = new byte[BYTE_SIZE];
-            // loop to read any incoming messages
+
             while (!exitStatus)
             {
                 try
                 {
-                    int bytesRead = netStream.Read(bytesReceived, 0,
-                    bytesReceived.Length);
-                    this.SetText(Encoding.ASCII.GetString(bytesReceived,
-                    0, bytesRead));
-                    
+                    int bytesRead = netStream.Read(bytesReceived, 0, bytesReceived.Length);
+
+                    // 0 bytes read indicates the client gracefully disconnected
+                    if (bytesRead == 0)
+                    {
+                        Console.WriteLine("Client disconnected gracefully.");
+                        exitStatus = true;
+                        break;
+                    }
+
+                    string receivedText = Encoding.ASCII.GetString(bytesReceived, 0, bytesRead);
+                    this.SetText(receivedText);
                 }
-                catch (System.IO.IOException)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Client has exited!");
+                    // Catches IOException, SocketException, ObjectDisposedException on disconnect
+                    Console.WriteLine($"Client connection lost: {ex.Message}");
                     exitStatus = true;
+                    break;
                 }
             }
         }
 
         /// <summary>
-        /// Method:     SetText
-        /// Desc:       Sets the text of the BinaryTreeTextBox.
+        /// Method:     SetText.
+        /// Desc:       Updates UI and data structures based on client response.
         /// </summary>
         /// <param name="text"></param>
         private void SetText(string text)
         {
+            // Prevent UI updates if the form is closing or disposed
+            if (this.IsDisposed || this.Disposing) return;
+
             if (this.BinaryTreeTextBox.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(SetText);
@@ -422,22 +439,29 @@ namespace MathQuestionChallenge
             }
             else
             {
-                string resultStatus = string.Empty;
+                if (string.IsNullOrWhiteSpace(text)) return;
 
-                if (text.Trim().Equals("y"))
-                {
-                    resultStatus = "Student answered the question correctly";
-                }
-                else
-                {
-                    resultStatus = "Student answered the question incorrectly";
-                    mathQuesLinkedList.AddFirst(currentQuestion);
-                    incorrectAnswerCount = 1;
-                    DisplayLinkedList();
-                }
+                string trimmedText = text.Trim();
 
-                clearTextBoxes();
-                SendButton.Enabled = true;
+                if (trimmedText.Equals("y", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Student answered correctly
+                    clearTextBoxes();
+                    SendButton.Enabled = true;
+                }
+                else if (trimmedText.Equals("n", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Student answered incorrectly
+                    if (currentQuestion != null)
+                    {
+                        mathQuesLinkedList.AddFirst(currentQuestion);
+                        incorrectAnswerCount = 1;
+                        DisplayLinkedList();
+                    }
+
+                    clearTextBoxes();
+                    SendButton.Enabled = true;
+                }
             }
         }
 
@@ -571,7 +595,7 @@ namespace MathQuestionChallenge
         }
 
         /// <summary>
-        /// Method:     BubbleSortAscButton_Click
+        /// Method:     BubbleSortAscButton_Click()
         /// Desc:       Handles the click event for the BubbleSortAscButton. Sorts the math questions in ascending order.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -586,7 +610,7 @@ namespace MathQuestionChallenge
         }
 
         /// <summary>
-        /// Method:     BubbleSortDescButton_Click
+        /// Method:     BubbleSortDescButton_Click()
         /// Desc:       Handles the click event for the BubbleSortDescButton. Sorts the math questions in descending order.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -598,7 +622,7 @@ namespace MathQuestionChallenge
         }
 
         /// <summary>
-        /// Method:     InsertionSortButton_Click
+        /// Method:     InsertionSortButton_Click()
         /// Desc:       Handles the click event for the InsertionSortButton. Sorts the math questions in ascending order.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -607,6 +631,47 @@ namespace MathQuestionChallenge
         {
             mathQuesList = Sorting.InsertionSortAscending(mathQuesList).ToList();
             DisplayTable();
+        }
+
+
+        private void PreOrderSaveButton_Click(object sender, EventArgs e)
+        {
+            WriteFile();
+        }
+
+        private void InOrderSaveButton_Click(object sender, EventArgs e)
+        {
+            WriteFile();
+        }
+
+        private void PostOrderSaveButton_Click(object sender, EventArgs e)
+        {
+            WriteFile();
+        }
+
+        /// <summary>
+        /// Method:     WriteFile();
+        /// Desc:       Saves the binary tree traversal data to a file.
+        /// </summary>
+        private void WriteFile()
+        {
+            // Check if there is actual traversal data ready to save
+            if (string.IsNullOrWhiteSpace(mathQuestionBinTree.TraversalString))
+            {
+                MessageBox.Show("No tree data available to save.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Grab the existing string, clean trailing commas, and save directly
+            string formattedData = $"Binary Tree Data: \n{mathQuestionBinTree.TraversalString.TrimEnd(' ', ',')}";
+
+            string filePath = "SavedMathTree.txt";
+            bool success = FileIO.SaveToFile(filePath, formattedData);
+
+            if (success)
+            {
+                MessageBox.Show($"File saved successfully to {Path.GetFullPath(filePath)}");
+            }
         }
     }
 }

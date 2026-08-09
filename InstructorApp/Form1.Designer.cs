@@ -387,6 +387,7 @@
             this.PostOrderSaveButton.TabIndex = 27;
             this.PostOrderSaveButton.Text = "Save";
             this.PostOrderSaveButton.UseVisualStyleBackColor = true;
+            this.PostOrderSaveButton.Click += new System.EventHandler(this.PostOrderSaveButton_Click);
             // 
             // PostOrderDisplayButton
             // 
@@ -430,6 +431,7 @@
             this.InOrderSaveButton.TabIndex = 24;
             this.InOrderSaveButton.Text = "Save";
             this.InOrderSaveButton.UseVisualStyleBackColor = true;
+            this.InOrderSaveButton.Click += new System.EventHandler(this.InOrderSaveButton_Click);
             // 
             // InOrderDisplayButton
             // 
@@ -459,6 +461,7 @@
             this.PreOrderSaveButton.TabIndex = 21;
             this.PreOrderSaveButton.Text = "Save";
             this.PreOrderSaveButton.UseVisualStyleBackColor = true;
+            this.PreOrderSaveButton.Click += new System.EventHandler(this.PreOrderSaveButton_Click);
             // 
             // PreOrderDisplayButton
             // 

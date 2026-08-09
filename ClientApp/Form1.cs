@@ -82,20 +82,30 @@ namespace ClientApp
         public void ReceiveStream()
         {
             byte[] bytesReceived = new byte[BYTE_SIZE];
-            // loop to read any incoming messages
+
             while (!exitStatus)
             {
                 try
                 {
-                    int bytesRead = netStream.Read(bytesReceived, 0,
-                    bytesReceived.Length);
-                    this.SetText(Encoding.ASCII.GetString(bytesReceived,
-                    0, bytesRead));
+                    int bytesRead = netStream.Read(bytesReceived, 0, bytesReceived.Length);
+
+                    // 0 bytes read indicates the remote peer gracefully closed the connection
+                    if (bytesRead == 0)
+                    {
+                        Console.WriteLine("Server disconnected gracefully.");
+                        exitStatus = true;
+                        break;
+                    }
+
+                    string receivedText = Encoding.ASCII.GetString(bytesReceived, 0, bytesRead);
+                    this.SetText(receivedText);
                 }
-                catch (System.IO.IOException)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Server has exited!");
+                    // Catches IOException, SocketException, ObjectDisposedException on disconnect
+                    Console.WriteLine($"Server connection lost: {ex.Message}");
                     exitStatus = true;
+                    break;
                 }
             }
         }
@@ -107,32 +117,37 @@ namespace ClientApp
         /// <param name="text"></param>
         private void SetText(string text)
         {
-            // InvokeRequired compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // if these threads are different, it returns true.
+            // Prevent UI updates if the form is closing or disposed
+            if (this.IsDisposed || this.Disposing) return;
+
             if (this.ClientQuestionTextBox.InvokeRequired)
             {
-                // d is a Delegate reference to the SetText() method
                 SetTextCallback d = new SetTextCallback(SetText);
                 this.Invoke(d, new object[] { text });
             }
             else
             {
+                if (string.IsNullOrWhiteSpace(text)) return;
 
-                string[] questionElements = text.Split(' ');
-                string firstNum = questionElements[0];
-                string mathOperator = questionElements[1];
-                string secondNum = questionElements[2];
-                string answer = questionElements[4];
+                string[] questionElements = text.Trim().Split(' ');
 
-                string formattedQuestion = $"{firstNum} {mathOperator} {secondNum} = ?";
-                ClientQuestionTextBox.Text = formattedQuestion + Environment.NewLine;
+                // Ensure array has enough elements before indexing
+                if (questionElements.Length >= 5)
+                {
+                    string firstNum = questionElements[0];
+                    string mathOperator = questionElements[1];
+                    string secondNum = questionElements[2];
+                    string answer = questionElements[4];
 
-                correctAnswer = int.Parse(answer);
-                ClientSubmitButton.Enabled = true;
+                    string formattedQuestion = $"{firstNum} {mathOperator} {secondNum} = ?";
+                    ClientQuestionTextBox.Text = formattedQuestion + Environment.NewLine;
 
-                //   this.Receive_TextBox.Text += "Server: " + text + Environment.NewLine;
-
+                    if (int.TryParse(answer, out int parsedAnswer))
+                    {
+                        correctAnswer = parsedAnswer;
+                        ClientSubmitButton.Enabled = true;
+                    }
+                }
             }
         }
 
