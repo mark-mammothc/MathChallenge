@@ -49,6 +49,10 @@ namespace ClientApp
             StartClient();
         }
 
+        /// <summary>
+        /// Method:     StartClient.
+        /// Desc:       Starts the client and establishes a connection to the server.
+        /// </summary>
         private void StartClient()
         {
             try
@@ -70,6 +74,11 @@ namespace ClientApp
             }
         }
 
+        /// <summary>
+        /// Method:     ReceiveStream.
+        /// Desc:       Receives the stream of data from the server and updates 
+        ///             the ClientQuestionTextBox with the received question.
+        /// </summary>
         public void ReceiveStream()
         {
             byte[] bytesReceived = new byte[BYTE_SIZE];
@@ -91,6 +100,11 @@ namespace ClientApp
             }
         }
 
+        /// <summary>
+        /// Method:     SetText.
+        /// Desc:       Sets the text of the ClientQuestionTextBox.
+        /// </summary>
+        /// <param name="text"></param>
         private void SetText(string text)
         {
             // InvokeRequired compares the thread ID of the
@@ -122,6 +136,15 @@ namespace ClientApp
             }
         }
 
+        /// <summary>
+        /// Method:     ClientSubmitButton_Click.
+        /// Desc:       Handles the click event for the ClientSubmitButton. 
+        ///             Validates the user's answer.
+        ///             Compares it with the correct answer.
+        ///             Sends the result back to the server.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void ClientSubmitButton_Click(object sender, EventArgs e)
         {
 
@@ -176,6 +199,13 @@ namespace ClientApp
             return "n";
         }
 
+        /// <summary>
+        /// Method:     ClientExitButton_Click.
+        /// Desc:       Handles the click event for the ClientExitButton. 
+        ///             Sets the exit status and closes the client socket.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void ClientExitButton_Click(object sender, EventArgs e)
         {
             exitStatus = true;
@@ -202,6 +232,11 @@ namespace ClientApp
             this.Close();
         }
 
+        /// <summary>
+        /// Method:     OnFormClosing.
+        /// Desc:       Handles the form closing event.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);

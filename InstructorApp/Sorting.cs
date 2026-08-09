@@ -40,7 +40,12 @@ namespace MathQuestionChallenge
             return arr;
         }
 
-        // 2. BUBBLE SORT - DESCENDING
+        /// <summary>
+        /// Method:     BubbleSortDescending()
+        /// Desc:       Sorts a list of MathQuestion objects in descending order based on their Answer property.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public static MathQuestion[] BubbleSortDescending(List<MathQuestion> list)
         {
             MathQuestion[] arr = list.ToArray();
@@ -65,7 +70,12 @@ namespace MathQuestionChallenge
             return arr;
         }
 
-        // Insertion Sort (Ascending by Answer)
+        /// <summary>
+        /// Method:     InsertionSortAscending()
+        /// Desc:       Sorts a list of MathQuestion objects in ascending order based on their Answer property.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public static MathQuestion[] InsertionSortAscending(List<MathQuestion> list)
         {
             MathQuestion[] arr = list.ToArray();

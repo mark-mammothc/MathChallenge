@@ -87,6 +87,11 @@ namespace MathQuestionChallenge
             QuestionArrayDataGridView.AutoGenerateColumns = false;
         }
 
+        /// <summary>
+        /// Handles the click event for the Send button.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void SendButton_Click(object sender, EventArgs e)
         {
             if(ValidateInputs())
@@ -134,6 +139,10 @@ namespace MathQuestionChallenge
             OperatorComboBox.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Method:     CreateDataGridViewCol
+        /// Desc:       Creates the columns for the DataGridView.
+        /// </summary>
         private void CreateDataGridViewCol()
         {
             QuestionArrayDataGridView.ReadOnly = true;
@@ -156,6 +165,10 @@ namespace MathQuestionChallenge
             QuestionArrayDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
+        /// <summary>
+        /// Validates the user inputs for the math question.
+        /// </summary>
+        /// <returns>true if all inputs are valid, false otherwise.</returns>
         private bool ValidateInputs()
         {
             // 1: Check if any fields are empty first
@@ -167,7 +180,10 @@ namespace MathQuestionChallenge
             return true;
         }
 
-        // Collects all empty errors
+        /// <summary>
+        /// Validates that the input fields are not empty.
+        /// </summary>
+        /// <returns>true if all fields have text, false otherwise.</returns>
         private bool ValidateNotEmpty()
         {
             string errorMessage = "";
@@ -192,7 +208,10 @@ namespace MathQuestionChallenge
             return true;
         }
 
-        // Collects all numeric format errors
+        /// <summary>
+        /// Validates that the input values in the text boxes are valid integers.
+        /// </summary>
+        /// <returns>true if all inputs are valid numbers, false otherwise.</returns>
         private bool ValidateAreNumbers()
         {
             string errorMessage = "";
@@ -223,6 +242,14 @@ namespace MathQuestionChallenge
             MessageBox.Show(fullMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        /// <summary>
+        /// Method:     calculateAnswer
+        /// Desc:       Calculates the answer to a math question based on the provided numbers and operation.
+        /// </summary>
+        /// <param name="firstNumber">The first number.</param>
+        /// <param name="secondNumber">The second number.</param>
+        /// <param name="operation">The operation to perform.</param>
+        /// <returns>The calculated answer as a string.</returns>
         private string calculateAnswer(string firstNumber, string secondNumber, string operation)
         {
             // Convert the string inputs to integers
@@ -248,6 +275,9 @@ namespace MathQuestionChallenge
             }
         }
 
+        // Clear the text boxes after sending a question --
+        // consider removing this as it is only used in the SetText()
+        // method after receiving a response from the client
         private void clearTextBoxes()
         {
             FirstNumberTextBox.Clear();
@@ -255,7 +285,10 @@ namespace MathQuestionChallenge
             AnswerTextBox.Clear();
         }
 
-        // QuestionArrayDataGridView
+        /// <summary>
+        /// Method:     DisplayTable
+        /// Desc:       Displays the list of math questions in the DataGridView.
+        /// </summary>
         private void DisplayTable()
         {
             // Ensure data-binding is detached so Rows.Clear() won't throw an exception
@@ -278,6 +311,11 @@ namespace MathQuestionChallenge
             QuestionArrayDataGridView.Refresh();
         }
 
+        /// <summary>
+        /// Method:     UpdateBinaryTreeDisplay
+        /// Desc:       Updates the display of the binary tree based on the specified traversal type.
+        /// </summary>
+        /// <param name="traversalType">The type of traversal to perform.</param>
         private void UpdateBinaryTreeDisplay(string traversalType)
         {
             if (mathQuestionBinTree.Count == 0)
@@ -313,6 +351,10 @@ namespace MathQuestionChallenge
         }
 
 
+        /// <summary>
+        /// Method:     StartServer.
+        /// Desc:       Starts the TCP server to listen for incoming connections.
+        /// </summary>
         private void StartServer()
         {
             try
@@ -366,6 +408,11 @@ namespace MathQuestionChallenge
             }
         }
 
+        /// <summary>
+        /// Method:     SetText
+        /// Desc:       Sets the text of the BinaryTreeTextBox.
+        /// </summary>
+        /// <param name="text"></param>
         private void SetText(string text)
         {
             if (this.BinaryTreeTextBox.InvokeRequired)
@@ -379,7 +426,6 @@ namespace MathQuestionChallenge
 
                 if (text.Trim().Equals("y"))
                 {
-               //     questionResult = "y";
                     resultStatus = "Student answered the question correctly";
                 }
                 else
@@ -411,6 +457,12 @@ namespace MathQuestionChallenge
             UpdateBinaryTreeDisplay("POST");
         }
 
+        /// <summary>
+        /// Method:     DisplayLinkedListButton_Click
+        /// Desc:       Handles the click event for the DisplayLinkedListButton. Displays the linked list of math questions.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void DisplayLinkedListButton_Click(object sender, EventArgs e)
         {
 
@@ -424,8 +476,6 @@ namespace MathQuestionChallenge
             
             if (incorrectAnswerCount == 1)
             {
-                // add the question to the linked list
-                //  mathQuesLinkedList.AddFirst(currentQuestion);
                 LinkedListTextBox.Text = "HEAD <->";
                 foreach (var item in mathQuesLinkedList)
                 {
@@ -439,12 +489,14 @@ namespace MathQuestionChallenge
             }
         }
 
+        /// <summary>
+        /// Method:     DisplayLinkedList
+        /// Desc:       Displays the linked list of math questions in the LinkedListTextBox.
+        /// </summary>
         private void DisplayLinkedList()
         {
             if (isVisible)
             {
-                // add the question to the linked list
-                //  mathQuesLinkedList.AddFirst(currentQuestion);
                 LinkedListTextBox.Text = "HEAD <->";
                 foreach (var item in mathQuesLinkedList)
                 {
@@ -456,6 +508,12 @@ namespace MathQuestionChallenge
 
 
 
+        /// <summary>
+        /// Method:     ExitButton_Click
+        /// Desc:       Handles the click event for the ExitButton. Sets the exit status and closes the server socket.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void ExitButton_Click(object sender, EventArgs e)
         {
             exitStatus = true;
@@ -484,11 +542,11 @@ namespace MathQuestionChallenge
             this.Close();
         }
 
-
-        // Override the OnFormClosing method to ensure proper cleanup when the form is closed
-        // This is important to prevent resource leaks and ensure
-        // that the server thread is terminated gracefully.
-
+        /// <summary>
+        /// Method:     OnFormClosing.
+        /// Desc:       Overrides the default form closing behavior to ensure proper cleanup.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
@@ -512,6 +570,12 @@ namespace MathQuestionChallenge
             }
         }
 
+        /// <summary>
+        /// Method:     BubbleSortAscButton_Click
+        /// Desc:       Handles the click event for the BubbleSortAscButton. Sorts the math questions in ascending order.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void BubbleSortAscButton_Click(object sender, EventArgs e)
         {
             // 1. Sort the list (modifies mathQuesList)
@@ -521,12 +585,24 @@ namespace MathQuestionChallenge
             DisplayTable();
         }
 
+        /// <summary>
+        /// Method:     BubbleSortDescButton_Click
+        /// Desc:       Handles the click event for the BubbleSortDescButton. Sorts the math questions in descending order.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void BubbleSortDescButton_Click(object sender, EventArgs e)
         {
             mathQuesList = Sorting.BubbleSortDescending(mathQuesList).ToList();
             DisplayTable();
         }
 
+        /// <summary>
+        /// Method:     InsertionSortButton_Click
+        /// Desc:       Handles the click event for the InsertionSortButton. Sorts the math questions in ascending order.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void InsertionSortButton_Click(object sender, EventArgs e)
         {
             mathQuesList = Sorting.InsertionSortAscending(mathQuesList).ToList();
