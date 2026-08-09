@@ -634,18 +634,29 @@ namespace MathQuestionChallenge
         }
 
 
+
+        // The following three methods handle the click events for the PreOrder, InOrder, and PostOrder save buttons.
+        // They update the binary tree display and then write the traversal data to a file.
+        //
+        // I am updating the TreeDisplay first to make sure the TraversalString is in the correct format before saving
+        // it to the file. Otherwise, you could end up saving an empty or incorrectly formatted string if the user
+        // hasn't clicked the display button first.
+
         private void PreOrderSaveButton_Click(object sender, EventArgs e)
         {
+            UpdateBinaryTreeDisplay("PRE");
             WriteFile();
         }
 
         private void InOrderSaveButton_Click(object sender, EventArgs e)
         {
+            UpdateBinaryTreeDisplay("IN");
             WriteFile();
         }
 
         private void PostOrderSaveButton_Click(object sender, EventArgs e)
         {
+            UpdateBinaryTreeDisplay("POST");
             WriteFile();
         }
 
