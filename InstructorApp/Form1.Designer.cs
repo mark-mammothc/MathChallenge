@@ -319,6 +319,7 @@
             this.BinarySearchButton.TabIndex = 16;
             this.BinarySearchButton.Text = "Binary Search";
             this.BinarySearchButton.UseVisualStyleBackColor = true;
+            this.BinarySearchButton.Click += new System.EventHandler(this.BinarySearchButton_Click);
             // 
             // BinaryTreeTextBox
             // 

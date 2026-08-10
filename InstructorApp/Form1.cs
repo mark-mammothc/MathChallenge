@@ -1,5 +1,4 @@
-﻿using BinTree;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +12,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using BinTree;
 
 namespace MathQuestionChallenge
 {
@@ -602,6 +603,14 @@ namespace MathQuestionChallenge
         /// <param name="e">The event data.</param>
         private void BubbleSortAscButton_Click(object sender, EventArgs e)
         {
+            
+            if (mathQuesList.Count == 0)
+            {
+                MessageBox.Show("No math questions to sort.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+
             // 1. Sort the list (modifies mathQuesList)
             mathQuesList = Sorting.BubbleSortAscending(mathQuesList).ToList();
 
@@ -617,6 +626,13 @@ namespace MathQuestionChallenge
         /// <param name="e">The event data.</param>
         private void BubbleSortDescButton_Click(object sender, EventArgs e)
         {
+
+            if (mathQuesList.Count == 0)
+            {
+                MessageBox.Show("No math questions to sort.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             mathQuesList = Sorting.BubbleSortDescending(mathQuesList).ToList();
             DisplayTable();
         }
@@ -629,6 +645,13 @@ namespace MathQuestionChallenge
         /// <param name="e">The event data.</param>
         private void InsertionSortButton_Click(object sender, EventArgs e)
         {
+
+            if (mathQuesList.Count == 0)
+            {
+                MessageBox.Show("No math questions to sort.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             mathQuesList = Sorting.InsertionSortAscending(mathQuesList).ToList();
             DisplayTable();
         }
@@ -682,6 +705,122 @@ namespace MathQuestionChallenge
             if (success)
             {
                 MessageBox.Show($"File saved successfully to {Path.GetFullPath(filePath)}");
+            }
+        }
+
+        private void BinarySearchButton_Click(object sender, EventArgs e)
+        {
+            if (mathQuesList.Count == 0)
+            {
+                MessageBox.Show("No math questions available for search.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            else if (string.IsNullOrEmpty(BinaryTreeInputTextBox.Text))
+            {
+                MessageBox.Show("Please enter a value to search for in the binary tree.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else
+            {
+
+                string[] searchKey = BinaryTreeInputTextBox.Text.Split(' ');
+                if (searchKey.Length != 5)
+                {
+                    MessageBox.Show("Incorrect search format. \nPlease use the following example format: '3 + 4 = 7'", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                else
+                {
+
+                    mathQuesList = Sorting.InsertionSortAscending(mathQuesList).ToList();
+                    int foundIndex = BinarySearch();
+
+                    if (foundIndex != -1)
+                    {
+                        MessageBox.Show($"Value found at index {foundIndex}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Value not found in the binary tree.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                    // check the formatting of the question - i.e. "3 + 4 = 7" is valid, but "3 + 4 = seven" is not valid
+                    //            bool validSearchKey = SearchKeyFormat(searchKey);
+
+                    //if (validSearchKey)
+                    //{
+
+                    //}
+
+
+
+
+
+
+                }
+            }
+        }
+
+
+        // Binary Search
+        private int BinarySearch()
+        {
+            int posFound = -1;
+            bool foundStatus = false;
+            int first = 0;
+            int last = mathQuesList.Count - 1;
+            int mid;
+
+            string[] splitArray = BinaryTreeInputTextBox.Text.Split(' ');
+            int ansToSearch = int.Parse(splitArray[4]);
+
+            while(!foundStatus && first <= last) {
+                mid = (first + last) / 2;
+
+                if (ansToSearch < mathQuesList[mid].Answer)
+                {
+                    last = mid - 1;
+                }
+                else if (ansToSearch > mathQuesList[mid].Answer)
+                {
+                    first = mid + 1;
+                }
+                else
+                {
+                    foundStatus = true;
+                    posFound = mid;
+                }
+            }
+            return posFound;
+        }
+
+
+
+
+        private bool SearchKeyFormat(string[] key)
+        {
+            // Ensure the array has exactly 5 parts to prevent IndexOutOfRangeException
+            if (key == null || key.Length != 5)
+            {
+                MessageBox.Show("Invalid search format. Please ensure you are using the correct format: '3 + 4 = 7'", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            string[] operators = { "+", "-", "x", "/" };
+
+            if (int.TryParse(key[0], out int leftOperand) &&
+                operators.Contains(key[1]) &&
+                int.TryParse(key[2], out int rightOperand) &&
+                key[3] == "=" &&
+                int.TryParse(key[4], out int answer))
+            {
+                Console.WriteLine("Valid search format detected.");
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Invalid search format. Please ensure you are using the correct format: '3 + 4 = 7'", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
         }
     }
