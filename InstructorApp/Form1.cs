@@ -108,9 +108,6 @@ namespace MathQuestionChallenge
                 mathQuestionBinTree.Add(currentQuestion);
                 mathQuesHashTable.Add(currentQuestion.ToQuestionStr(), currentQuestion);
 
-                Console.WriteLine($"Added question to data structures: {currentQuestion.ToQuestionStr()}");
-                Console.WriteLine(mathQuesHashTable.Values.ToString());
-
                 // Rebuild the complete "ORDER ASKED" string from mathQuesList
                 string allQuestionsAsked = string.Join(", ", mathQuesList);
 
@@ -255,26 +252,36 @@ namespace MathQuestionChallenge
         private string calculateAnswer(string firstNumber, string secondNumber, string operation)
         {
             // Convert the string inputs to integers
-            int firstNum = int.Parse(firstNumber);
-            int secondNum = int.Parse(secondNumber);
-
-            switch (operation)
+            try
             {
-                case "+":
-                    return (firstNum + secondNum).ToString();
-                case "-":
-                    return (firstNum - secondNum).ToString();
-                case "x":
-                    return (firstNum * secondNum).ToString();
-                case "/":
-                    if (secondNum == 0)
-                    {
-                        throw new DivideByZeroException("Cannot divide by zero.");
-                    }
-                    return (firstNum / secondNum).ToString();
-                default:
-                    throw new InvalidOperationException("Invalid operation.");
+                int firstNum = int.Parse(firstNumber);
+                int secondNum = int.Parse(secondNumber);
+
+                switch (operation)
+                {
+                    case "+":
+                        return (firstNum + secondNum).ToString();
+                    case "-":
+                        return (firstNum - secondNum).ToString();
+                    case "x":
+                        return (firstNum * secondNum).ToString();
+                    case "/":
+                        if (secondNum == 0)
+                        {
+                            throw new DivideByZeroException("Cannot divide by zero.");
+                        }
+                        return (firstNum / secondNum).ToString();
+                    default:
+                        throw new InvalidOperationException("Invalid operation.");
+                }
             }
+            catch (FormatException)
+            {
+                throw new FormatException("One or both of the input numbers are not valid integers.");
+            }
+
+
+
         }
 
         // Clear the text boxes after sending a question --

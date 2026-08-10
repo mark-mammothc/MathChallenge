@@ -55,7 +55,7 @@ namespace BinarySearchUnitTest
     }
 
     [TestClass]
-    public class UnitTest1
+    public class NUnitSearch
     {
         List<MathQuestion> mathQuesList = new List<MathQuestion>();
      //  mathQuesList.Add(new MathQuestion(3, "+", 4, 7));
