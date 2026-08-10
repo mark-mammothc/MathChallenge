@@ -724,6 +724,7 @@ namespace MathQuestionChallenge
             {
 
                 string[] searchKey = BinaryTreeInputTextBox.Text.Split(' ');
+
                 if (searchKey.Length != 5)
                 {
                     MessageBox.Show("Incorrect search format. \nPlease use the following example format: '3 + 4 = 7'", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -731,31 +732,24 @@ namespace MathQuestionChallenge
                 }
                 else
                 {
-
-                    mathQuesList = Sorting.InsertionSortAscending(mathQuesList).ToList();
-                    int foundIndex = BinarySearch();
-
-                    if (foundIndex != -1)
-                    {
-                        MessageBox.Show($"Value found at index {foundIndex}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Value not found in the binary tree.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-
                     // check the formatting of the question - i.e. "3 + 4 = 7" is valid, but "3 + 4 = seven" is not valid
-                    //            bool validSearchKey = SearchKeyFormat(searchKey);
+                    bool validSearchKey = SearchKeyFormat(searchKey);
 
-                    //if (validSearchKey)
-                    //{
+                    if (validSearchKey)
+                    {
+                        mathQuesList = Sorting.InsertionSortAscending(mathQuesList).ToList();
 
-                    //}
+                        int foundIndex = BinarySearch();
 
-
-
-
-
+                        if (foundIndex != -1)
+                        {
+                            MessageBox.Show($"Value found at index {foundIndex}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Value not found in the binary tree.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
 
                 }
             }

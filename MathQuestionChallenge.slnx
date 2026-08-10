@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="BinarySearchUnitTest/BinarySearchUnitTest.csproj" Id="bd983076-20f9-4f4b-b906-e198aac2e13f" />
+  <Project Path="BSearchUnitTest/BSearchUnitTest.csproj" Id="df96e8c1-23c9-4874-b847-f6f292255e6e" />
   <Project Path="ClientApp/ClientApp.csproj" Id="fa23ddab-31dd-4813-8265-a83d1d709cdf" />
   <Project Path="InstructorApp/InstructorApp.csproj" Id="46d32dfc-ea9b-471f-9abe-99db3957c708" />
 </Solution>
