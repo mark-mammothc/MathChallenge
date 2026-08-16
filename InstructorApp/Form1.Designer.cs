@@ -68,6 +68,7 @@
             this.PreOrderSaveButton = new System.Windows.Forms.Button();
             this.PreOrderDisplayButton = new System.Windows.Forms.Button();
             this.SystemMsgLabel = new System.Windows.Forms.Label();
+            this.QuestionResultLabel = new System.Windows.Forms.Label();
             this.QuestionGroupBox.SuspendLayout();
             this.QuestionArrayGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QuestionArrayDataGridView)).BeginInit();
@@ -485,11 +486,23 @@
             this.SystemMsgLabel.TabIndex = 19;
             this.SystemMsgLabel.Text = "Initializing";
             // 
+            // QuestionResultLabel
+            // 
+            this.QuestionResultLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.QuestionResultLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.QuestionResultLabel.Location = new System.Drawing.Point(532, 577);
+            this.QuestionResultLabel.Name = "QuestionResultLabel";
+            this.QuestionResultLabel.Size = new System.Drawing.Size(263, 15);
+            this.QuestionResultLabel.TabIndex = 20;
+            this.QuestionResultLabel.Text = "...";
+            this.QuestionResultLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // InstructorAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(804, 601);
+            this.Controls.Add(this.QuestionResultLabel);
             this.Controls.Add(this.SystemMsgLabel);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.BinaryTreeGroupBox);
@@ -561,6 +574,7 @@
         private System.Windows.Forms.Button InOrderSaveButton;
         private System.Windows.Forms.Button InOrderDisplayButton;
         private System.Windows.Forms.Label SystemMsgLabel;
+        private System.Windows.Forms.Label QuestionResultLabel;
     }
 }
 
