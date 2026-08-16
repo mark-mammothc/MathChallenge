@@ -310,6 +310,7 @@
             this.HashSearchButton.TabIndex = 17;
             this.HashSearchButton.Text = "Hash Search";
             this.HashSearchButton.UseVisualStyleBackColor = true;
+            this.HashSearchButton.Click += new System.EventHandler(this.HashSearchButton_Click);
             // 
             // BinarySearchButton
             // 

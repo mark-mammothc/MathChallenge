@@ -824,5 +824,37 @@ namespace MathQuestionChallenge
                 return false;
             }
         }
+
+        private void HashSearchButton_Click(object sender, EventArgs e)
+        {
+            string mathQToSearch = BinaryTreeInputTextBox.Text;
+            if (HashSearch(mathQuesHashTable, mathQToSearch) == true)
+            {
+                Console.WriteLine(mathQToSearch + " FOUND in Hashtable");
+                Console.WriteLine();
+                MessageBox.Show($"Value found: {mathQToSearch}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                Console.WriteLine(mathQToSearch + " NOT FOUND in Hashtable");
+                Console.WriteLine();
+                MessageBox.Show($"NOT FOUND in Hashtable: {mathQToSearch}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+
+        private bool HashSearch(Hashtable mQHashtable, string mathQToSearch)
+        {
+            bool isFound = false;
+
+            if (mQHashtable.ContainsKey(mathQToSearch))
+            {
+                isFound = true;
+            }
+
+            return isFound;
+
+        } // end HashSearch() method
     }
 }
+
