@@ -888,7 +888,7 @@ namespace MathQuestionChallenge
                         {
                             Console.WriteLine(mathQToSearch + " NOT FOUND in Hashtable");
                             Console.WriteLine();
-                            MessageBox.Show($"NOT FOUND in Hashtable: {mathQToSearch}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show($"Value not found in Hashtable: {mathQToSearch}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
