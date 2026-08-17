@@ -90,7 +90,8 @@ namespace MathQuestionChallenge
         }
 
         /// <summary>
-        /// Handles the click event for the Send button.
+        /// Method:     SendButton_Click()
+        /// Desc:       Handles the click event for the Send button.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
@@ -151,7 +152,7 @@ namespace MathQuestionChallenge
         }
 
         /// <summary>
-        /// Method:     CreateDataGridViewCol
+        /// Method:     CreateDataGridViewCol()
         /// Desc:       Creates the columns for the DataGridView.
         /// </summary>
         private void CreateDataGridViewCol()
@@ -264,6 +265,7 @@ namespace MathQuestionChallenge
         private string calculateAnswer(string firstNumber, string secondNumber, string operation)
         {
             // Convert the string inputs to integers
+            // Use try-catch to handle potential exceptions, such as division by zero
             try
             {
                 int firstNum = int.Parse(firstNumber);
@@ -288,9 +290,6 @@ namespace MathQuestionChallenge
                 MessageBox.Show("Error! Cannot divide by zero.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return "0";
             }
-
-
-
         }
 
         // Clear the text boxes after sending a question --
@@ -485,6 +484,9 @@ namespace MathQuestionChallenge
         }
 
 
+        // sort and display the binary tree in pre-order, in-order, and post-order
+        // all three methods call the UpdateBinaryTreeDisplay() method with the appropriate
+        // traversal type as a string
         private void PreOrderDisplayButton_Click(object sender, EventArgs e)
         {
             UpdateBinaryTreeDisplay("PRE");
@@ -650,7 +652,7 @@ namespace MathQuestionChallenge
                 return;
             }
 
-            mathQuesList = Sorting.BubbleSortDescending(mathQuesList).ToList();
+            mathQuesList = Sorting.SelectionSortDescending(mathQuesList).ToList();
             DisplayTable();
         }
 
@@ -725,6 +727,12 @@ namespace MathQuestionChallenge
             }
         }
 
+        /// <summary>
+        /// Method:     BinarySearchButton_Click()
+        /// Desc:       Handles the click event for the BinarySearchButton. Performs a binary search on the sorted math questions.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void BinarySearchButton_Click(object sender, EventArgs e)
         {
             if (mathQuesList.Count == 0)
@@ -808,6 +816,12 @@ namespace MathQuestionChallenge
 
 
 
+        /// <summary>
+        /// Method:     SearchKeyFormat()
+        /// Desc:       Validates the format of the search key entered by the user.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         private bool SearchKeyFormat(string[] key)
         {
             // Ensure the array has exactly 5 parts to prevent IndexOutOfRangeException
@@ -849,7 +863,6 @@ namespace MathQuestionChallenge
             }
             else
             {
-
                 string[] searchKey = BinaryTreeInputTextBox.Text.Split(' ');
 
                 if (searchKey.Length != 5)
@@ -864,8 +877,6 @@ namespace MathQuestionChallenge
 
                     if (validSearchKey)
                     {
-
-
                         string mathQToSearch = BinaryTreeInputTextBox.Text;
                         if (HashSearch(mathQuesHashTable, mathQToSearch) == true)
                         {
@@ -895,7 +906,6 @@ namespace MathQuestionChallenge
             }
 
             return isFound;
-
         } // end HashSearch() method
     }
 }
