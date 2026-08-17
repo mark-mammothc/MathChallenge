@@ -675,8 +675,6 @@ namespace MathQuestionChallenge
             DisplayTable();
         }
 
-
-
         // The following three methods handle the click events for the PreOrder, InOrder, and PostOrder save buttons.
         // They update the binary tree display and then write the traversal data to a file.
         //

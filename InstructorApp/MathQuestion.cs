@@ -15,6 +15,14 @@ namespace MathQuestionChallenge
         public int Answer { get; set; }
 
         // constructor method
+        /// <summary>
+        /// method: MathQuestion()
+        /// desc:  constructor method for the MathQuestion class
+        /// </summary>
+        /// <param name="leftOperand"></param>
+        /// <param name="mathOperator"></param>
+        /// <param name="rightOperand"></param>
+        /// <param name="answer"></param>
         public MathQuestion(int leftOperand, string mathOperator, int rightOperand, int answer)
         {
             this.LeftOperand = leftOperand;
