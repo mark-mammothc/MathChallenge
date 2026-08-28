@@ -90,15 +90,28 @@ namespace MathQuestionChallenge
         }
 
         /// <summary>
-        /// Handles the click event for the Send button.
+        /// Method:     SendButton_Click()
+        /// Desc:       Handles the click event for the Send button.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
         private void SendButton_Click(object sender, EventArgs e)
         {
-            if(ValidateInputs())
+            QuestionResultLabel.Text = ""; // clear the result label before processing
+
+            if (ValidateInputs())
             {
+                
                 AnswerTextBox.Text = calculateAnswer(FirstNumberTextBox.Text, SecondNumberTextBox.Text, OperatorComboBox.SelectedItem.ToString());
+
+
+                // Check for division by zero before creating the MathQuestion object
+                if (AnswerTextBox.Text == "0" && OperatorComboBox.SelectedItem.ToString() == "/")
+                {
+                    clearTextBoxes();
+                    // Division by zero case, do not proceed
+                    return;
+                }
 
                 // int leftOperand, string mathOperator, int rightOperand, int answer
                 currentQuestion = new MathQuestion(int.Parse(FirstNumberTextBox.Text), OperatorComboBox.SelectedItem.ToString(), int.Parse(SecondNumberTextBox.Text), int.Parse(AnswerTextBox.Text));
@@ -139,7 +152,7 @@ namespace MathQuestionChallenge
         }
 
         /// <summary>
-        /// Method:     CreateDataGridViewCol
+        /// Method:     CreateDataGridViewCol()
         /// Desc:       Creates the columns for the DataGridView.
         /// </summary>
         private void CreateDataGridViewCol()
@@ -252,6 +265,7 @@ namespace MathQuestionChallenge
         private string calculateAnswer(string firstNumber, string secondNumber, string operation)
         {
             // Convert the string inputs to integers
+            // Use try-catch to handle potential exceptions, such as division by zero
             try
             {
                 int firstNum = int.Parse(firstNumber);
@@ -266,22 +280,16 @@ namespace MathQuestionChallenge
                     case "x":
                         return (firstNum * secondNum).ToString();
                     case "/":
-                        if (secondNum == 0)
-                        {
-                            throw new DivideByZeroException("Cannot divide by zero.");
-                        }
                         return (firstNum / secondNum).ToString();
                     default:
                         throw new InvalidOperationException("Invalid operation.");
                 }
             }
-            catch (FormatException)
+            catch (DivideByZeroException)
             {
-                throw new FormatException("One or both of the input numbers are not valid integers.");
+                MessageBox.Show("Error! Cannot divide by zero.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return "0";
             }
-
-
-
         }
 
         // Clear the text boxes after sending a question --
@@ -456,6 +464,7 @@ namespace MathQuestionChallenge
                     // Student answered correctly
                     clearTextBoxes();
                     SendButton.Enabled = true;
+                    QuestionResultLabel.Text = "Student answered correctly!";
                 }
                 else if (trimmedText.Equals("n", StringComparison.OrdinalIgnoreCase))
                 {
@@ -465,6 +474,7 @@ namespace MathQuestionChallenge
                         mathQuesLinkedList.AddFirst(currentQuestion);
                         incorrectAnswerCount = 1;
                         DisplayLinkedList();
+                        QuestionResultLabel.Text = "Student answered incorrectly!";
                     }
 
                     clearTextBoxes();
@@ -474,6 +484,9 @@ namespace MathQuestionChallenge
         }
 
 
+        // sort and display the binary tree in pre-order, in-order, and post-order
+        // all three methods call the UpdateBinaryTreeDisplay() method with the appropriate
+        // traversal type as a string
         private void PreOrderDisplayButton_Click(object sender, EventArgs e)
         {
             UpdateBinaryTreeDisplay("PRE");
@@ -498,8 +511,6 @@ namespace MathQuestionChallenge
         private void DisplayLinkedListButton_Click(object sender, EventArgs e)
         {
 
-            isVisible = true;
-
             if (mathQuesList.Count == 0)
             {
                 LinkedListTextBox.Text = "No math questions answered";
@@ -508,6 +519,7 @@ namespace MathQuestionChallenge
             
             if (incorrectAnswerCount == 1)
             {
+                isVisible = true;
                 LinkedListTextBox.Text = "HEAD <->";
                 foreach (var item in mathQuesLinkedList)
                 {
@@ -640,7 +652,7 @@ namespace MathQuestionChallenge
                 return;
             }
 
-            mathQuesList = Sorting.BubbleSortDescending(mathQuesList).ToList();
+            mathQuesList = Sorting.SelectionSortDescending(mathQuesList).ToList();
             DisplayTable();
         }
 
@@ -663,8 +675,6 @@ namespace MathQuestionChallenge
             DisplayTable();
         }
 
-
-
         // The following three methods handle the click events for the PreOrder, InOrder, and PostOrder save buttons.
         // They update the binary tree display and then write the traversal data to a file.
         //
@@ -675,26 +685,26 @@ namespace MathQuestionChallenge
         private void PreOrderSaveButton_Click(object sender, EventArgs e)
         {
             UpdateBinaryTreeDisplay("PRE");
-            WriteFile();
+            WriteFile("PRE_ORDER");
         }
 
         private void InOrderSaveButton_Click(object sender, EventArgs e)
         {
             UpdateBinaryTreeDisplay("IN");
-            WriteFile();
+            WriteFile("IN_ORDER");
         }
 
         private void PostOrderSaveButton_Click(object sender, EventArgs e)
         {
             UpdateBinaryTreeDisplay("POST");
-            WriteFile();
+            WriteFile("POST_ORDER");
         }
 
         /// <summary>
         /// Method:     WriteFile();
         /// Desc:       Saves the binary tree traversal data to a file.
         /// </summary>
-        private void WriteFile()
+        private void WriteFile(string formatType)
         {
             // Check if there is actual traversal data ready to save
             if (string.IsNullOrWhiteSpace(mathQuestionBinTree.TraversalString))
@@ -706,7 +716,7 @@ namespace MathQuestionChallenge
             // Grab the existing string, clean trailing commas, and save directly
             string formattedData = $"Binary Tree Data: \n{mathQuestionBinTree.TraversalString.TrimEnd(' ', ',')}";
 
-            string filePath = "SavedMathTree.txt";
+            string filePath = $"SavedMathTree_{formatType}.txt";
             bool success = FileIO.SaveToFile(filePath, formattedData);
 
             if (success)
@@ -715,6 +725,12 @@ namespace MathQuestionChallenge
             }
         }
 
+        /// <summary>
+        /// Method:     BinarySearchButton_Click()
+        /// Desc:       Handles the click event for the BinarySearchButton. Performs a binary search on the sorted math questions.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void BinarySearchButton_Click(object sender, EventArgs e)
         {
             if (mathQuesList.Count == 0)
@@ -798,6 +814,12 @@ namespace MathQuestionChallenge
 
 
 
+        /// <summary>
+        /// Method:     SearchKeyFormat()
+        /// Desc:       Validates the format of the search key entered by the user.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         private bool SearchKeyFormat(string[] key)
         {
             // Ensure the array has exactly 5 parts to prevent IndexOutOfRangeException
@@ -827,18 +849,47 @@ namespace MathQuestionChallenge
 
         private void HashSearchButton_Click(object sender, EventArgs e)
         {
-            string mathQToSearch = BinaryTreeInputTextBox.Text;
-            if (HashSearch(mathQuesHashTable, mathQToSearch) == true)
+            if (mathQuesList.Count == 0)
             {
-                Console.WriteLine(mathQToSearch + " FOUND in Hashtable");
-                Console.WriteLine();
-                MessageBox.Show($"Value found: {mathQToSearch}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No math questions available for search.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            else if (string.IsNullOrEmpty(BinaryTreeInputTextBox.Text))
+            {
+                MessageBox.Show("Please enter a value to search for in the Hashtable.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
             else
             {
-                Console.WriteLine(mathQToSearch + " NOT FOUND in Hashtable");
-                Console.WriteLine();
-                MessageBox.Show($"NOT FOUND in Hashtable: {mathQToSearch}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string[] searchKey = BinaryTreeInputTextBox.Text.Split(' ');
+
+                if (searchKey.Length != 5)
+                {
+                    MessageBox.Show("Incorrect search format. \nPlease use the following example format: '3 + 4 = 7'", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                else
+                {
+                    // check the formatting of the question - i.e. "3 + 4 = 7" is valid, but "3 + 4 = seven" is not valid
+                    bool validSearchKey = SearchKeyFormat(searchKey);
+
+                    if (validSearchKey)
+                    {
+                        string mathQToSearch = BinaryTreeInputTextBox.Text;
+                        if (HashSearch(mathQuesHashTable, mathQToSearch) == true)
+                        {
+                            Console.WriteLine(mathQToSearch + " FOUND in Hashtable");
+                            Console.WriteLine();
+                            MessageBox.Show($"Value found: {mathQToSearch}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            Console.WriteLine(mathQToSearch + " NOT FOUND in Hashtable");
+                            Console.WriteLine();
+                            MessageBox.Show($"Value not found in Hashtable: {mathQToSearch}", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
             }
         }
 
@@ -853,7 +904,6 @@ namespace MathQuestionChallenge
             }
 
             return isFound;
-
         } // end HashSearch() method
     }
 }

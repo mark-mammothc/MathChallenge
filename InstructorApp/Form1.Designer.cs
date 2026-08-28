@@ -43,7 +43,7 @@
             this.QuestionArrayGroupBox = new System.Windows.Forms.GroupBox();
             this.QuestionArrayDataGridView = new System.Windows.Forms.DataGridView();
             this.BubbleSortAscButton = new System.Windows.Forms.Button();
-            this.BubbleSortDescButton = new System.Windows.Forms.Button();
+            this.SelectionSortDescButton = new System.Windows.Forms.Button();
             this.InsertionSortButton = new System.Windows.Forms.Button();
             this.LinkedListGroupBox = new System.Windows.Forms.GroupBox();
             this.ExitButton = new System.Windows.Forms.Button();
@@ -68,6 +68,7 @@
             this.PreOrderSaveButton = new System.Windows.Forms.Button();
             this.PreOrderDisplayButton = new System.Windows.Forms.Button();
             this.SystemMsgLabel = new System.Windows.Forms.Label();
+            this.QuestionResultLabel = new System.Windows.Forms.Label();
             this.QuestionGroupBox.SuspendLayout();
             this.QuestionArrayGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QuestionArrayDataGridView)).BeginInit();
@@ -219,15 +220,15 @@
             this.BubbleSortAscButton.UseVisualStyleBackColor = true;
             this.BubbleSortAscButton.Click += new System.EventHandler(this.BubbleSortAscButton_Click);
             // 
-            // BubbleSortDescButton
+            // SelectionSortDescButton
             // 
-            this.BubbleSortDescButton.Location = new System.Drawing.Point(475, 253);
-            this.BubbleSortDescButton.Name = "BubbleSortDescButton";
-            this.BubbleSortDescButton.Size = new System.Drawing.Size(135, 25);
-            this.BubbleSortDescButton.TabIndex = 9;
-            this.BubbleSortDescButton.Text = "Bubble Sort (desc)";
-            this.BubbleSortDescButton.UseVisualStyleBackColor = true;
-            this.BubbleSortDescButton.Click += new System.EventHandler(this.BubbleSortDescButton_Click);
+            this.SelectionSortDescButton.Location = new System.Drawing.Point(475, 253);
+            this.SelectionSortDescButton.Name = "SelectionSortDescButton";
+            this.SelectionSortDescButton.Size = new System.Drawing.Size(135, 25);
+            this.SelectionSortDescButton.TabIndex = 9;
+            this.SelectionSortDescButton.Text = "Selection Sort (desc)";
+            this.SelectionSortDescButton.UseVisualStyleBackColor = true;
+            this.SelectionSortDescButton.Click += new System.EventHandler(this.BubbleSortDescButton_Click);
             // 
             // InsertionSortButton
             // 
@@ -485,17 +486,29 @@
             this.SystemMsgLabel.TabIndex = 19;
             this.SystemMsgLabel.Text = "Initializing";
             // 
+            // QuestionResultLabel
+            // 
+            this.QuestionResultLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.QuestionResultLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.QuestionResultLabel.Location = new System.Drawing.Point(532, 577);
+            this.QuestionResultLabel.Name = "QuestionResultLabel";
+            this.QuestionResultLabel.Size = new System.Drawing.Size(263, 15);
+            this.QuestionResultLabel.TabIndex = 20;
+            this.QuestionResultLabel.Text = "...";
+            this.QuestionResultLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // InstructorAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(804, 601);
+            this.Controls.Add(this.QuestionResultLabel);
             this.Controls.Add(this.SystemMsgLabel);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.BinaryTreeGroupBox);
             this.Controls.Add(this.LinkedListGroupBox);
             this.Controls.Add(this.InsertionSortButton);
-            this.Controls.Add(this.BubbleSortDescButton);
+            this.Controls.Add(this.SelectionSortDescButton);
             this.Controls.Add(this.BubbleSortAscButton);
             this.Controls.Add(this.QuestionArrayGroupBox);
             this.Controls.Add(this.SendButton);
@@ -536,7 +549,7 @@
         private System.Windows.Forms.GroupBox QuestionArrayGroupBox;
         private System.Windows.Forms.DataGridView QuestionArrayDataGridView;
         private System.Windows.Forms.Button BubbleSortAscButton;
-        private System.Windows.Forms.Button BubbleSortDescButton;
+        private System.Windows.Forms.Button SelectionSortDescButton;
         private System.Windows.Forms.Button InsertionSortButton;
         private System.Windows.Forms.GroupBox LinkedListGroupBox;
         private System.Windows.Forms.TextBox LinkedListTextBox;
@@ -561,6 +574,7 @@
         private System.Windows.Forms.Button InOrderSaveButton;
         private System.Windows.Forms.Button InOrderDisplayButton;
         private System.Windows.Forms.Label SystemMsgLabel;
+        private System.Windows.Forms.Label QuestionResultLabel;
     }
 }
 

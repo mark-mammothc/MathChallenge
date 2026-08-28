@@ -40,32 +40,24 @@ namespace MathQuestionChallenge
             return arr;
         }
 
-        /// <summary>
-        /// Method:     BubbleSortDescending()
-        /// Desc:       Sorts a list of MathQuestion objects in descending order based on their Answer property.
-        /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public static MathQuestion[] BubbleSortDescending(List<MathQuestion> list)
+        public static MathQuestion[] SelectionSortDescending(List<MathQuestion> list)
         {
             MathQuestion[] arr = list.ToArray();
             int n = arr.Length;
-
             for (int i = 0; i < n - 1; i++)
             {
-                bool swapped = false;
-                for (int j = 0; j < n - i - 1; j++)
+                int maxIndex = i;
+                for (int j = i + 1; j < n; j++)
                 {
-                    // Descending: swap if current is LESS than next
-                    if (arr[j].Answer < arr[j + 1].Answer)
+                    if (arr[j].Answer > arr[maxIndex].Answer)
                     {
-                        MathQuestion temp = arr[j];
-                        arr[j] = arr[j + 1];
-                        arr[j + 1] = temp;
-                        swapped = true;
+                        maxIndex = j;
                     }
                 }
-                if (!swapped) break;
+                // Swap the found maximum element with the first element
+                MathQuestion temp = arr[maxIndex];
+                arr[maxIndex] = arr[i];
+                arr[i] = temp;
             }
             return arr;
         }

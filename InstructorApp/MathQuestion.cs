@@ -69,7 +69,6 @@ namespace MathQuestionChallenge
             strArray[4] = Answer.ToString();
 
             return strArray;
-
         }
 
 
