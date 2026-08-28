@@ -14,7 +14,14 @@ namespace MathQuestionChallenge
         public int RightOperand { get; set; }
         public int Answer { get; set; }
 
-        // constructor method
+        /// <summary>
+        /// Method:     Constructor for MathQuestion class
+        /// Desc:       Initializes a new instance of the MathQuestion class with the specified left operand, math operator, right operand, and answer.
+        /// </summary>
+        /// <param name="leftOperand"></param>
+        /// <param name="mathOperator"></param>
+        /// <param name="rightOperand"></param>
+        /// <param name="answer"></param>
         public MathQuestion(int leftOperand, string mathOperator, int rightOperand, int answer)
         {
             this.LeftOperand = leftOperand;
@@ -23,20 +30,23 @@ namespace MathQuestionChallenge
             this.Answer = answer;
         }
 
-        // returns 0 if answers are the same for the 2 questions
-        // returns -1 if this.Answer is < otherMathQues.Answer
-        // returns 1 if this.Answer is > otherMathQues.Answer
-        // Note: BinaryTree<MathQues> rejects questions with the same answer
-        // so, 3 + 4 = 7 and 8 - 1 = 7 are effectively the same as far as the BinaryTree
-        // is concerned.
+        /// <summary>
+        /// Method:         CompareTo(MathQuestion otherMathQues)
+        /// Description:    Compares this math question with another math question based on their answers.
+        /// </summary>
+        /// <param name="otherMathQues"></param>
+        /// <returns></returns>
         public int CompareTo(MathQuestion otherMathQues)
         {
             return this.Answer.CompareTo(otherMathQues.Answer);
         }
 
-        // returns string format: "3 + 4 = 7"
-        // // use this to send the math q from the instructor to the student
-        // // also - use this method for hash search (hashtable Key)
+        
+        /// <summary>
+        /// Method:         ToQuestionStr()
+        /// Description:    Returns a string representation of the math question in the format "leftOperand operator rightOperand = answer".
+        /// </summary>
+        /// <returns></returns>
         public string ToQuestionStr()
         {
             return this.LeftOperand.ToString() + " " + this.MathOperator + " " + this.RightOperand.ToString() + " = " + this.Answer.ToString();
