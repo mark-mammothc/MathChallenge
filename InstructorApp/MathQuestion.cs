@@ -52,13 +52,21 @@ namespace MathQuestionChallenge
             return this.LeftOperand.ToString() + " " + this.MathOperator + " " + this.RightOperand.ToString() + " = " + this.Answer.ToString();
         }
 
-        // returns string format: "7(3+4)"
-        // use this method for the binary tree
+        /// <summary>
+        /// Method:         ToString()
+        /// Description:    Returns a string representation of the math question in the format "answer(leftOperand mathOperator rightOperand)".
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return this.Answer.ToString() + "(" + this.LeftOperand.ToString() + this.MathOperator + this.RightOperand.ToString() + ")";
         }
 
+        /// <summary>
+        /// Method:         GetStrArray()
+        /// Description:    Returns an array of strings representing the components of the math question.
+        /// </summary>
+        /// <returns></returns>
         public string[] GetStrArray()
         {
             string[] strArray = new string[5];
